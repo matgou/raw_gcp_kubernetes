@@ -32,7 +32,8 @@ module "cp_boostrap_template" {
   service_account = {
     email = local.service_account.bt
   }
-  tags = ["${var.cluster_name}-controlplane"]
+  tags       = ["${var.cluster_name}-controlplane"]
+  depends_on = [module.cloud_storage]
 }
 
 module "cp_instance_template" {
