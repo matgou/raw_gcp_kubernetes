@@ -7,6 +7,8 @@ Ce projet Terraform a pour objectif d'automatiser le déploiement de clusters Ku
   * **prerequisites:** Ce module contient les ressources communes à tous les clusters, telles que le VPC, l'Artifact Registry et le stockage des binaires sur Google Cloud Storage.
   * **clusters:** Ce module se concentre sur les ressources spécifiques à chaque cluster, comme les groupes d'instances, les load balancers, etc.
 
+![Architecture](docs/architecture.png)
+
 ### Prérequis
 
   * **Un compte Google Cloud Platform:** Assurez-vous d'avoir créé un projet et activé les APIs nécessaires (Compute Engine, Container Engine, Storage, etc.).

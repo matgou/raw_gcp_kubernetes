@@ -66,7 +66,7 @@ module "node_instance_template" {
   project_id         = var.project
   machine_type       = "n2-standard-4"
   source_image       = data.google_compute_image.debian.self_link
-  subnetwork         = "subnet-control-plane"
+  subnetwork         = "subnet-workers"
   subnetwork_project = var.project
   startup_script = join("\n", [
     local.init_script,
