@@ -4,12 +4,16 @@ zone_primary   = "europe-west9-a"
 zone_secondary = "europe-west9-b"
 zone_tertiary  = "europe-west9-c"
 
+# prerequis 
+binary_bucket_name = "kube-buckets-xexs-binary-a563"
+
 # debian_name
 debian_name    = "bookworm"
 debian_version = "12"
 
 # Cluster info
 cluster_name = "kube"
+cluster_uuid = "e4a591e1-ef4a-46cc-a85c-44a341b79e04"
 network_name = "cka-mycluster-net"
 
 # Control Plane

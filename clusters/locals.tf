@@ -1,19 +1,24 @@
-resource "random_uuid" "cluster_uuid" {
-}
-
 locals {
   cluster_name = var.cluster_name
-  cluster_uuid = random_uuid.cluster_uuid.result
-
+  cluster_uuid = var.cluster_uuid
+  registries = [
+    "kube-apt-bookworm",
+    "kube-apt-proxy-repo-bookworm",
+    "kube-docker-ghcr-repo-proxy",
+    "kube-docker-k8s-repo-proxy",
+    "kube-docker-quay-repo-proxy",
+  ]
+  registries_iam = flatten([for registry in local.registries : [for sa in local.iam_service_account : { sa = sa, registry = registry }]])
   service_account = {
     "cp" = module.service_accounts.emails_list[1]
     "n"  = module.service_accounts.emails_list[2]
     "bt" = module.service_accounts.emails_list[0]
   }
+  iam_sa_prefix = "a-${split("-", local.cluster_uuid)[4]}"
   iam_service_account = {
-    "cp" = module.service_accounts.iam_emails_list[1]
-    "n"  = module.service_accounts.iam_emails_list[2]
-    "bt" = module.service_accounts.iam_emails_list[0]
+    "cp" = "serviceAccount:${local.iam_sa_prefix}-cp@${var.project}.iam.gserviceaccount.com"
+    "n"  = "serviceAccount:${local.iam_sa_prefix}-n@${var.project}.iam.gserviceaccount.com"
+    "bt" = "serviceAccount:${local.iam_sa_prefix}-bt@${var.project}.iam.gserviceaccount.com"
   }
   named_ports = [{
     name = "https"

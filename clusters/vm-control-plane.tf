@@ -33,7 +33,7 @@ module "cp_boostrap_template" {
     email = local.service_account.bt
   }
   tags       = ["${var.cluster_name}-controlplane"]
-  depends_on = [module.cloud_storage]
+  depends_on = [module.cloud_storage, google_storage_bucket_iam_member.read_binary]
 }
 
 module "cp_instance_template" {
@@ -55,7 +55,8 @@ module "cp_instance_template" {
   service_account = {
     email = local.service_account.cp
   }
-  tags = ["${var.cluster_name}-controlplane"]
+  tags       = ["${var.cluster_name}-controlplane"]
+  depends_on = [module.cloud_storage, google_storage_bucket_iam_member.read_binary]
 }
 
 module "node_instance_template" {
@@ -76,7 +77,8 @@ module "node_instance_template" {
   service_account = {
     email = local.service_account.n
   }
-  tags = ["${var.cluster_name}-nodes"]
+  tags       = ["${var.cluster_name}-nodes"]
+  depends_on = [module.cloud_storage, google_storage_bucket_iam_member.read_binary]
 }
 
 module "mig_bootrap" {
@@ -89,6 +91,7 @@ module "mig_bootrap" {
   named_ports       = local.named_ports
   target_size       = 1
   health_check      = local.health_check
+  depends_on        = [module.cloud_storage, google_storage_bucket_iam_member.read_binary]
 }
 
 module "mig_cp" {
@@ -101,6 +104,7 @@ module "mig_cp" {
   named_ports       = local.named_ports
   target_size       = 3
   health_check      = local.health_check
+  depends_on        = [module.cloud_storage, google_storage_bucket_iam_member.read_binary]
 }
 
 module "mig_nodes" {
@@ -113,18 +117,5 @@ module "mig_nodes" {
   named_ports       = local.named_ports
   target_size       = 3
   health_check      = local.health_check
+  depends_on        = [module.cloud_storage, google_storage_bucket_iam_member.read_binary]
 }
-
-#module "cp_bootstrap" {
-#  source  = "terraform-google-modules/vm/google//modules/compute_instance"
-#  version = "~> 12.0"
-#
-#  region              = var.region
-#  zone                = var.zone_primary
-#  subnetwork          = "subnet-control-plane"
-#  subnetwork_project  = var.project
-#  num_instances       = 2
-#  hostname            = "${var.cluster_name}-boostrap"
-#  instance_template   = module.cp_instance_template.self_link
-#  deletion_protection = false
-#}
