@@ -7,9 +7,8 @@ module "apt-k8s" {
   format        = "APT"
   repository_id = "${var.cluster_name}-apt-${var.debian_name}"
   members = {
-    "readers" = ["serviceAccount:kube-cp-nodes-account@${var.project}.iam.gserviceaccount.com"]
+    "readers" = ["allUsers"]
   }
-  depends_on = [module.cp_service_accounts]
 }
 
 module "apt-debian" {
@@ -29,10 +28,6 @@ module "apt-debian" {
       }
     }
   }
-  members = {
-    "readers" = ["serviceAccount:kube-cp-nodes-account@${var.project}.iam.gserviceaccount.com"]
-  }
-  depends_on = [module.cp_service_accounts]
 }
 
 module "docker-k8s" {
@@ -60,5 +55,4 @@ module "docker-k8s" {
   members = {
     "readers" = ["allUsers"]
   }
-  depends_on = [module.cp_service_accounts]
 }

@@ -35,6 +35,7 @@ echo "upgrade -y -o APT::Get::Show-Upgraded=true" | sudo tee /etc/cron-apt/actio
 # Install binaries
 gsutil ls gs://kube-buckets-xexs-binary-a563/bin/** | while read fic; do gsutil cp $fic /tmp/; cd /usr/local/bin/; tar xvf /tmp/$(basename $fic); done;
 gsutil ls "gs://kube-buckets-xexs-binary-a563/config/**" | while read fic; do gsutil cp $fic $(echo $fic | sed "s@gs://kube-buckets-xexs-binary-a563/config@@"); done; 
+chmod a+x /usr/local/bin/*sh
 
 # containerd config
 containerd config default | tee /etc/containerd/config.toml

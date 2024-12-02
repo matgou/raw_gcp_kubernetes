@@ -24,10 +24,6 @@ module "cloud_storage" {
   folders = {
     "binary" = ["bin"]
   }
-  bucket_viewers = {
-    "binary" = "serviceAccount:kube-cp-nodes-account@${var.project}.iam.gserviceaccount.com"
-  }
-  set_viewer_roles = true
 }
 
 output "gcs" {
@@ -49,6 +45,7 @@ resource "google_storage_bucket_object" "addon" {
     "/etc/profile.d/kube.sh"                = "etc_profile.d_kube.sh"
     "/usr/local/bin/init-controle_plane.sh" = "init-controle_plane.sh"
     "/usr/local/bin/init-cilium.sh"         = "init-cilium.sh"
+    "/usr/local/bin/init-cli.sh"            = "init-cli.sh"
   }
   name           = "config${each.key}"
   source         = "${path.module}/config/${each.value}"
