@@ -8,6 +8,13 @@ module "vpc" {
 
   subnets = [
     {
+      subnet_name   = "proxy-only-subnet"
+      subnet_ip     = "10.10.30.0/24"
+      subnet_region = var.region
+      purpose       = "REGIONAL_MANAGED_PROXY"
+      role          = "ACTIVE"
+    },
+    {
       subnet_name           = "subnet-control-plane"
       subnet_ip             = "10.10.10.0/24"
       subnet_region         = var.region
@@ -81,5 +88,28 @@ module "firewall-submodule" {
         flow_logs = false
       }
     }
+
+    // health-check
+    allow-healthcheck = {
+      description          = "Allow healthcheck"
+      direction            = "INGRESS"
+      action               = "allow"
+      ranges               = ["35.191.0.0/16", "130.211.0.0/22"] # source or destination ranges (depends on `direction`)
+      use_service_accounts = false                               # if `true` targets/sources expect list of instances SA, if false - list of tags
+      targets              = null                                # target_service_accounts or target_tags depends on `use_service_accounts` value
+      sources              = null                                # source_service_accounts or source_tags depends on `use_service_accounts` value
+      rules = [{
+        protocol = "tcp"
+        ports    = ["6443"]
+        },
+      ]
+
+      extra_attributes = {
+        disabled  = false
+        priority  = 95
+        flow_logs = false
+      }
+    }
+
   }
 }
