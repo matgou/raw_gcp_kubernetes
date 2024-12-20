@@ -56,3 +56,22 @@ module "docker-k8s" {
     "readers" = ["allUsers"]
   }
 }
+
+module "docker-dockerio" {
+  source  = "GoogleCloudPlatform/artifact-registry/google"
+  version = "~> 0.2"
+
+  project_id    = var.project
+  location      = var.region
+  format        = "DOCKER"
+  mode          = "REMOTE_REPOSITORY"
+  repository_id = "${var.cluster_name}-docker-dockerio-repo-proxy"
+  remote_repository_config = {
+    docker_repository = {
+      public_repository = "DOCKER_HUB"
+    }
+  }
+  members = {
+    "readers" = ["allUsers"]
+  }
+}
