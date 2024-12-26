@@ -16,6 +16,14 @@ Ce projet Terraform a pour objectif d'automatiser le déploiement de clusters Ku
   * **Un fichier de configuration de Google Cloud:** Vous aurez besoin d'un fichier JSON contenant les informations d'authentification pour votre projet GCP.
   * **Connaissances de base en Terraform et Kubernetes:** Une bonne compréhension de Terraform et des concepts de base de Kubernetes est recommandée.
 
+#### Recopie/maj des sources dans les dépots APT
+
+```
+sudo apt-mirror prerequies/pkg/apt-configuration
+
+find /var/spool/apt-mirror/mirror/pkgs.k8s.io/core: -name "*deb" | while read file; do  gcloud artifacts apt upload kube-apt-bookworm --location=europe-west9 --source=$file; done;
+```
+
 ### Structure du projet
 
 Le projet est organisé de la manière suivante :
