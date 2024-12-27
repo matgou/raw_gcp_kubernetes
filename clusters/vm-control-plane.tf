@@ -116,6 +116,6 @@ module "mig_nodes" {
   instance_template = module.node_instance_template.self_link
   named_ports       = local.named_ports
   target_size       = 1
-  health_check      = local.health_check
-  depends_on        = [module.cloud_storage, google_storage_bucket_iam_member.read_binary]
+  #health_check      = local.health_check
+  depends_on = [module.cloud_storage, google_storage_bucket_iam_member.read_binary]
 }
