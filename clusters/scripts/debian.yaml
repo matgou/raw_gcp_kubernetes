@@ -1,0 +1,30 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: debian-test-sa
+  namespace: default
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: debian-test
+  namespace: default
+spec:
+  serviceAccountName: debian-test-sa
+  containers:
+  - name: writer
+    image: busybox
+    command:
+      - "sleep"
+      - "100000000"
+    volumeMounts:
+    - name: gcs-fuse-csi-ephemeral
+      mountPath: /data
+  volumes:
+  - name: gcs-fuse-csi-ephemeral
+    csi:
+      driver: gcsfuse.csi.storage.gke.io
+      volumeAttributes:
+        bucketName: kapablebucket-123456
+  restartPolicy: Never
