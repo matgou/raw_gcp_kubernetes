@@ -1,0 +1,65 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: etcd-backup
+  namespace: kube-system
+spec:
+  schedule: "0 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          initContainers:
+          - command:
+            - etcdctl
+            - --endpoints=https://127.0.0.1:2379
+            - --cert=/etc/kubernetes/pki/etcd/server.crt
+            - --cacert=/etc/kubernetes/pki/etcd/ca.crt
+            - --key=/etc/kubernetes/pki/etcd/server.key
+            - snapshot
+            - save
+            - /backups/etcd.dump
+            image: europe-west9-docker.pkg.dev/sandbox-mgoulin/kube-docker-k8s-repo-proxy/etcd:3.5.15-0
+            imagePullPolicy: IfNotPresent
+            name: etcdctl
+            resources:
+              requests:
+                cpu: 100m
+                memory: 100Mi
+            volumeMounts:
+            - mountPath: /backups
+              name: cache-backups
+            - mountPath: /etc/kubernetes/pki/etcd
+              name: etcd-certs
+          containers:
+          - name: gcs-copy
+            image: gcr.io/google.com/cloudsdktool/google-cloud-cli
+            command:
+            - gsutil
+            - cp
+            - /backups/etcd.dump
+            - gs://kube-buckets-e4a591e1-ef4a-46cc-a85c-44a341b79e04-config-efdc/backups/etcd.dump
+            volumeMounts:
+            - mountPath: /backups
+              name: cache-backups
+          hostNetwork: true
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                - matchExpressions:
+                  - key: "node-role.kubernetes.io/control-plane"
+                    operator: Exists
+          tolerations:
+          - key: "node-role.kubernetes.io/control-plane"
+            operator: "Exists"
+            effect: "NoSchedule"
+          restartPolicy: "Never"
+          volumes:
+          - name: cache-backups
+            emptyDir: {}
+          - hostPath:
+              path: /etc/kubernetes/pki/etcd
+              type: DirectoryOrCreate
+            name: etcd-certs
