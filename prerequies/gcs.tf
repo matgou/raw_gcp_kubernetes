@@ -42,10 +42,15 @@ resource "google_storage_bucket_object" "binaries" {
 }
 resource "google_storage_bucket_object" "addon" {
   for_each = {
-    "/etc/profile.d/kube.sh"                = "etc_profile.d_kube.sh"
-    "/usr/local/bin/init-controle_plane.sh" = "init-controle_plane.sh"
-    "/usr/local/bin/init-cilium.sh"         = "init-cilium.sh"
-    "/usr/local/bin/init-cli.sh"            = "init-cli.sh"
+    "/etc/profile.d/kube.sh"                                       = "etc_profile.d_kube.sh"
+    "/usr/local/bin/init-controle_plane.sh"                        = "init-controle_plane.sh"
+    "/usr/local/bin/init-cilium.sh"                                = "init-cilium.sh"
+    "/usr/local/bin/init-cli.sh"                                   = "init-cli.sh"
+    "/usr/local/bin/etcd-backup.yaml"                              = "etcd-backup.yaml"
+    "/usr/local/bin/debian.yaml"                                   = "debian.yaml"
+    "/usr/local/bin/gcs-fuse-csi-driver_create-cert.sh"            = "gcs-fuse-csi-driver_create-cert.sh"
+    "/usr/local/bin/gcs-fuse-csi-validating_admission_policy.yaml" = "gcs-fuse-csi-validating_admission_policy.yaml"
+    "/usr/local/bin/gcs-fuse-csi-driver-specs-generated.yaml"      = "gcs-fuse-csi-driver-specs-generated.yaml"
   }
   name           = "config${each.key}"
   source         = "${path.module}/config/${each.value}"

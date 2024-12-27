@@ -13,18 +13,16 @@ metadata:
 spec:
   serviceAccountName: debian-test-sa
   containers:
-  - name: writer
-    image: busybox
+  - name: sleep
+    image: europe-west9-docker.pkg.dev/sandbox-mgoulin/kube-docker-dockerio-repo-proxy/library/debian
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "250m"
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
     command:
       - "sleep"
       - "100000000"
-    volumeMounts:
-    - name: gcs-fuse-csi-ephemeral
-      mountPath: /data
-  volumes:
-  - name: gcs-fuse-csi-ephemeral
-    csi:
-      driver: gcsfuse.csi.storage.gke.io
-      volumeAttributes:
-        bucketName: kapablebucket-123456
   restartPolicy: Never
