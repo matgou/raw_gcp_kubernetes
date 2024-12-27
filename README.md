@@ -16,7 +16,14 @@ Ce projet Terraform a pour objectif d'automatiser le déploiement de clusters Ku
   * **Un fichier de configuration de Google Cloud:** Vous aurez besoin d'un fichier JSON contenant les informations d'authentification pour votre projet GCP.
   * **Connaissances de base en Terraform et Kubernetes:** Une bonne compréhension de Terraform et des concepts de base de Kubernetes est recommandée.
 
-#### Recopie/maj des sources dans les dépots APT
+#### Etape 1: Création des prérequis
+
+```
+cd prerequis
+terraform init -backend-config ./backend-vars/mgoulin.tfvars 
+terraform apply -var-file ./tfvars/mgoulin.tfvars 
+```
+#### Etape 2: Recopie des sources dans les dépots APT
 
 ```
 sudo apt-mirror prerequies/pkg/apt-configuration
