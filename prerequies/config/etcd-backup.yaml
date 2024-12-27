@@ -39,7 +39,10 @@ spec:
             - gsutil
             - cp
             - /backups/etcd.dump
-            - gs://kube-buckets-e4a591e1-ef4a-46cc-a85c-44a341b79e04-config-efdc/backups/etcd.dump
+            - "gs://$(cluster_config_bucket)/backups/etcd.dump"
+            envFrom:
+            - configMapRef:
+                name: cluster-config
             volumeMounts:
             - mountPath: /backups
               name: cache-backups

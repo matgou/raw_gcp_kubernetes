@@ -23,11 +23,15 @@ module "cp_boostrap_template" {
     "gsutil cp /etc/kubernetes/pki/etcd/ca.crt gs://${module.cloud_storage.names["config"]}/certs/etcd-ca.crt",
     "gsutil cp /etc/kubernetes/pki/etcd/ca.key gs://${module.cloud_storage.names["config"]}/certs/etcd-ca.key",
     "gsutil cp /etc/kubernetes/admin.conf gs://${module.cloud_storage.names["config"]}/certs/",
+    "gsutil cp /etc/cluster_config_bucket gs://${module.cloud_storage.names["config"]}/",
+    "gsutil cp /etc/cluster_uuid gs://${module.cloud_storage.names["config"]}/",
+    "gsutil cp /etc/cluster_name gs://${module.cloud_storage.names["config"]}/",
     "kubeadm token create --print-join-command > node_join_command.sh",
     "gsutil cp node_join_command.sh gs://${module.cloud_storage.names["config"]}/node_join_command.sh",
     "echo $(kubeadm token create --print-join-command)' --control-plane' > cp_join_command.sh",
     "gsutil cp cp_join_command.sh gs://${module.cloud_storage.names["config"]}/cp_join_command.sh",
-    "gsutil cp /dev/null gs://${module.cloud_storage.names["config"]}/provisioned"
+    "gsutil cp /dev/null gs://${module.cloud_storage.names["config"]}/provisioned",
+    "KUBECONFIG=/etc/kubernetes/admin.conf kubectl create configmap -n kube-system cluster-config --from-literal=cluster_name=$( cat /etc/cluster_name ) --from-literal=cluster_uuid=$( cat /etc/cluster_uuid ) --from-literal=cluster_config_bucket=$( cat /etc/cluster_config_bucket )"
   ])
   service_account = {
     email = local.service_account.bt
