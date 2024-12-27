@@ -55,6 +55,10 @@ sudo systemctl enable containerd
 # see: https://kubernetes.io/fr/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
 #curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 #echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
-apt-get install -y kubelet kubeadm kubectl
+apt-get install -y kubelet=${kubelet_pkg_version} kubeadm=${kubeadm_pkg_version} kubectl=${kubectl_pkg_version}
 apt-mark hold kubelet kubeadm kubectl
 systemctl enable --now kubelet
+echo "${kubelet_pkg_version}" > /etc/kubelet_pkg_version
+echo "${kubeadm_pkg_version}" > /etc/kubeadm_pkg_version
+echo "${kubectl_pkg_version}" > /etc/kubectl_pkg_version
+echo "${kube_version}" > /etc/kube_version

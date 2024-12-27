@@ -49,9 +49,14 @@ locals {
     cluster_uuid          = local.cluster_uuid
     cluster_config_bucket = module.cloud_storage.names["config"]
 
-    apt-repository     = "kube-apt-proxy-repo-bookworm"
-    apt-k8s-repository = "kube-apt-bookworm"
-    debian-name        = var.debian_name
+    apt-repository      = "kube-apt-proxy-repo-bookworm"
+    apt-k8s-repository  = "kube-apt-bookworm"
+    debian-name         = var.debian_name
+    kubelet_pkg_version = "1.31.4-1.1"
+    kubeadm_pkg_version = "1.31.4-1.1"
+    kubectl_pkg_version = "1.31.4-1.1"
+    kube_version        = "1.31.4"
+
   })
   wait_cluster_ready_script = "x=1; until [ \"$x\" = \"0\" ]; do sleep 1; echo wait; gsutil ls gs://${module.cloud_storage.names["config"]}/provisioned; x=$?; done;"
   download_config_script = join("\n", [
