@@ -9,7 +9,9 @@ module "cloud_storage" {
   prefix           = "${local.cluster_name}-buckets-${local.cluster_uuid}"
   names            = ["config"]
   randomize_suffix = true
-
+  versioning = {
+    "config" = true
+  }
   bucket_policy_only = {
     "config" = true
   }
@@ -29,4 +31,5 @@ module "cloud_storage" {
   force_destroy = {
     "config" = true
   }
+  depends_on = [module.service_accounts]
 }
