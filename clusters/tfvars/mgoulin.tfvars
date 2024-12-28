@@ -5,7 +5,7 @@ zone_secondary = "europe-west9-b"
 zone_tertiary  = "europe-west9-c"
 
 # prerequis 
-binary_bucket_name = "kube-buckets-xexs-binary-a563"
+binary_bucket_name = "kube-buckets-ciqh-binary-554b"
 
 # debian_name
 debian_name    = "bookworm"
