@@ -5,6 +5,7 @@ echo ${cluster_name} > /etc/cluster_name
 echo ${cluster_uuid} > /etc/cluster_uuid
 echo ${cluster_config_bucket} > /etc/cluster_config_bucket
 
+echo ${kubeapi_ip} kubeapi-$( cat /etc/cluster_uuid ).kube.private | tee -a /etc/hosts
 swapoff -a # disable swap
 
 # Custom kernel options

@@ -1,6 +1,8 @@
 locals {
   cluster_name = var.cluster_name
   cluster_uuid = var.cluster_uuid
+  mig_bootrap_num_instances = 1
+  mig_cp_num_instances = 3
   registries = [
     "kube-apt-bookworm",
     "kube-apt-proxy-repo-bookworm",
@@ -48,6 +50,7 @@ locals {
     cluster_name          = local.cluster_name
     cluster_uuid          = local.cluster_uuid
     cluster_config_bucket = module.cloud_storage.names["config"]
+    kubeapi_ip            = "10.10.10.41"
 
     apt-repository      = "kube-apt-proxy-repo-bookworm"
     apt-k8s-repository  = "kube-apt-bookworm"
@@ -59,6 +62,7 @@ locals {
 
   })
   wait_cluster_ready_script = "x=1; until [ \"$x\" = \"0\" ]; do sleep 1; echo wait; gsutil ls gs://${module.cloud_storage.names["config"]}/provisioned; x=$?; done;"
+  wait_all_cp_nodes_are_ok = "x=0; until [ \"$x\" = \"${local.mig_bootrap_num_instances + local.mig_cp_num_instances}\" ]; do sleep 1; x=$( kubectl get nodes -o json | jq -r '.items[]|select(.metadata.labels.\"node-role.kubernetes.io/control-plane\"?)|.status.conditions[]|select(.type == \"Ready\")|select(.status==\"True\").status' | wc -l ); done;"
   download_config_script = join("\n", [
     "gsutil cp gs://${module.cloud_storage.names["config"]}/certs/ca.crt                /etc/kubernetes/pki/ca.crt             ",
     "gsutil cp gs://${module.cloud_storage.names["config"]}/certs/ca.key                /etc/kubernetes/pki/ca.key             ",
