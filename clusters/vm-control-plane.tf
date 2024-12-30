@@ -10,12 +10,15 @@ module "cp_boostrap_template" {
   spot               = false
   source_image       = data.google_compute_image.debian.self_link
   subnetwork         = "subnet-control-plane"
+  metadata = {
+    shutdown-script = "/usr/local/bin/reset-control_plane.sh"
+  }
   subnetwork_project = var.project
   startup_script = join("\n", [
     local.init_script,
     "gsutil ls gs://${module.cloud_storage.names["config"]}/provisioned; if [ $? == '0' ]; then exit 0; fi",
     "sleep 30",
-    "bash /usr/local/bin/init-controle_plane.sh",
+    "bash /usr/local/bin/init-control_plane.sh",
     "bash /usr/local/bin/init-cilium.sh",
     "gsutil cp /etc/kubernetes/pki/ca.crt gs://${module.cloud_storage.names["config"]}/certs/",
     "gsutil cp /etc/kubernetes/pki/ca.key gs://${module.cloud_storage.names["config"]}/certs/",
@@ -36,8 +39,7 @@ module "cp_boostrap_template" {
     "gsutil cp /dev/null gs://${module.cloud_storage.names["config"]}/provisioned",
     "KUBECONFIG=/etc/kubernetes/admin.conf kubectl create configmap -n kube-system cluster-config --from-literal=cluster_name=$( cat /etc/cluster_name ) --from-literal=cluster_uuid=$( cat /etc/cluster_uuid ) --from-literal=cluster_config_bucket=$( cat /etc/cluster_config_bucket )",
     local.wait_all_cp_nodes_are_ok,
-    "kubectl drain $HOSTNAME --ignore-daemonsets",
-    "kubectl delete node $HOSTNAME",
+    "/usr/local/bin/reset-control_plane.sh",
     "shutdown"
     # wait other nodes to join cluster
 
@@ -59,6 +61,9 @@ module "cp_instance_template" {
   spot               = true
   source_image       = data.google_compute_image.debian.self_link
   subnetwork         = "subnet-control-plane"
+  metadata = {
+    shutdown-script = "/usr/local/bin/reset-control_plane.sh"
+  }
   subnetwork_project = var.project
   startup_script = join("\n", [
     local.init_script,

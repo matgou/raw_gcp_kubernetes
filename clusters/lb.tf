@@ -17,9 +17,6 @@ module "int-tcp-proxy" {
     network    = var.network_name
   }
 }
-output "group" {
-  value = module.mig_bootrap.umig_details
-}
 
 #module "gce-ilb" {
 #  source  = "terraform-google-modules/lb-internal/google"

@@ -43,7 +43,8 @@ resource "google_storage_bucket_object" "binaries" {
 resource "google_storage_bucket_object" "addon" {
   for_each = {
     "/etc/profile.d/kube.sh"                                       = "etc_profile.d_kube.sh"
-    "/usr/local/bin/init-controle_plane.sh"                        = "init-controle_plane.sh"
+    "/usr/local/bin/init-control_plane.sh"                        = "init-control_plane.sh"
+    "/usr/local/bin/reset-control_plane.sh"  = "reset-control_plane.sh"
     "/usr/local/bin/init-cilium.sh"                                = "init-cilium.sh"
     "/usr/local/bin/init-cli.sh"                                   = "init-cli.sh"
     "/usr/local/bin/etcd-backup.yaml"                              = "etcd-backup.yaml"
