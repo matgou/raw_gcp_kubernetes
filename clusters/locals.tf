@@ -2,7 +2,7 @@ locals {
   cluster_name = var.cluster_name
   cluster_uuid = var.cluster_uuid
   mig_bootrap_num_instances = 1
-  mig_cp_num_instances = 3
+  mig_cp_num_instances = 2
   registries = [
     "kube-apt-bookworm",
     "kube-apt-proxy-repo-bookworm",
@@ -28,7 +28,7 @@ locals {
   }]
   health_check = {
     type                = "https"
-    check_interval_sec  = 1
+    check_interval_sec  = 60
     healthy_threshold   = 4
     timeout_sec         = 1
     unhealthy_threshold = 5

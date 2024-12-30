@@ -1,6 +1,8 @@
 #!/bin/sh
 init-cli.sh
 
+gcloud compute instance-groups managed abandon-instances cp-$( cat /etc/cluster_uuid )-mig --instances $( hostname -s ) --region europe-west9 &
+
 kubectl drain $( hostname -s ) --ignore-daemonsets --force=true
 kubectl delete node $( hostname -s )
 kubeadm reset -f

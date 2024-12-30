@@ -11,7 +11,7 @@ module "service_accounts" {
   display_name  = "${var.cluster_name} Service Account for kubernetes"
   description   = "${var.cluster_name} Service Account for kubernetes"
 
-  project_roles = []
+  project_roles = ["${var.project}=>roles/compute.instanceAdmin"]
 }
 
 resource "google_artifact_registry_repository_iam_member" "read_ar" {
