@@ -35,6 +35,7 @@ resource "google_storage_bucket_object" "binaries" {
   for_each = {
     "cilium"  = "cilium-linux-amd64.tar.gz"
     "nerdctl" = "nerdctl-2.0.0-linux-amd64.tar.gz"
+    "etcdctl" = "etcd-v3.5.17-linux-amd64.tar.gz"
   }
   name   = "bin/${each.value}"
   source = "${path.module}/binaries/${each.value}"

@@ -2,7 +2,7 @@ locals {
   cluster_name = var.cluster_name
   cluster_uuid = var.cluster_uuid
   mig_bootrap_num_instances = 1
-  mig_cp_num_instances = 2
+  mig_cp_num_instances = 3
   registries = [
     "kube-apt-bookworm",
     "kube-apt-proxy-repo-bookworm",

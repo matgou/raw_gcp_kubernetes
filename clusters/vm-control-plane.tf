@@ -11,7 +11,7 @@ module "cp_boostrap_template" {
   source_image       = data.google_compute_image.debian.self_link
   subnetwork         = "subnet-control-plane"
   metadata = {
-    shutdown-script = "/usr/local/bin/reset-control_plane.sh"
+    shutdown-script = join("\n", ["#!/bin/bash", "/usr/local/bin/reset-control_plane.sh"])
   }
   subnetwork_project = var.project
   startup_script = join("\n", [
@@ -62,9 +62,7 @@ module "cp_instance_template" {
   source_image       = data.google_compute_image.debian.self_link
   subnetwork         = "subnet-control-plane"
   metadata = {
-    shutdown-script =<<EOF
-     /usr/local/bin/reset-control_plane.sh
-EOF
+    shutdown-script = join("\n", ["#!/bin/bash", "/usr/local/bin/reset-control_plane.sh"])
   }
   subnetwork_project = var.project
   startup_script = join("\n", [
