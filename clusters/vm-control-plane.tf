@@ -2,14 +2,14 @@
 
 module "cp_boostrap_template" {
   source  = "terraform-google-modules/vm/google//modules/instance_template"
-  version = "~> 12.0"
+  version = "~> 13.0"
 
-  region             = var.region
-  project_id         = var.project
-  machine_type       = "n2-highcpu-2"
-  spot               = false
-  source_image       = data.google_compute_image.debian.self_link
-  subnetwork         = "subnet-control-plane"
+  region       = var.region
+  project_id   = var.project
+  machine_type = "n2-highcpu-2"
+  spot         = false
+  source_image = data.google_compute_image.debian.self_link
+  subnetwork   = data.google_compute_subnetwork.control-plane.self_link
   metadata = {
     shutdown-script = join("\n", ["#!/bin/bash", "/usr/local/bin/reset-control_plane.sh"])
   }
@@ -55,12 +55,12 @@ module "cp_instance_template" {
   source  = "terraform-google-modules/vm/google//modules/instance_template"
   version = "~> 12.0"
 
-  region             = var.region
-  project_id         = var.project
-  machine_type       = "n2-highcpu-2"
-  spot               = true
-  source_image       = data.google_compute_image.debian.self_link
-  subnetwork         = "subnet-control-plane"
+  region       = var.region
+  project_id   = var.project
+  machine_type = "n2-highcpu-2"
+  spot         = true
+  source_image = data.google_compute_image.debian.self_link
+  subnetwork   = "subnet-control-plane"
   metadata = {
     shutdown-script = join("\n", ["#!/bin/bash", "/usr/local/bin/reset-control_plane.sh"])
   }
@@ -125,7 +125,7 @@ module "mig_cp" {
   hostname          = "cp-${local.cluster_uuid}"
   instance_template = module.cp_instance_template.self_link
   named_ports       = local.named_ports
-  target_size      = local.mig_cp_num_instances
+  target_size       = local.mig_cp_num_instances
   health_check      = local.health_check
   depends_on        = [module.cloud_storage, google_storage_bucket_iam_member.read_binary]
 }

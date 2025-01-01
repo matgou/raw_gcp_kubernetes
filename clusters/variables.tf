@@ -39,3 +39,21 @@ variable "network_tier" {
   description = "Network network_tier"
   default     = "PREMIUM"
 }
+
+variable "kubelet_pkg_version" {
+  description = "Version of kubelet pkg in debian repo"
+  type        = string
+}
+
+variable "kubeadm_pkg_version" {
+  description = "Version of kubeadm pkg in debian repo"
+  type        = string
+}
+variable "kubectl_pkg_version" {
+  description = "Version of kubectl pkg in debian repo"
+  type        = string
+}
+variable "kube_version" {
+  description = "Version of kubernetes version"
+  type        = string
+}

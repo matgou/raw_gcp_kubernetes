@@ -17,4 +17,9 @@ cluster_uuid = "e4a591e1-ef4a-46cc-a85c-44a341b79e04"
 network_name = "cka-mycluster-net"
 
 # Control Plane
-cp_num_instances = 2
+cp_num_instances = 3
+
+kubelet_pkg_version = "1.31.4-1.1"
+kubeadm_pkg_version = "1.31.4-1.1"
+kubectl_pkg_version = "1.31.4-1.1"
+kube_version        = "1.31.4"
